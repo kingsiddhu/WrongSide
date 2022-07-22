@@ -90,6 +90,11 @@ def booltoint(x):
         a = 0
     return a
 
+def find(name, path):
+    for root, dirs, files in os.walk(path):
+        if name in files:
+            return True
+
 
 def Playerdead_boolToggle():
     global PlayerDead
@@ -118,13 +123,6 @@ def update():
         scale =3,
     )
     txt.resolution = 1080 * txt.size
-    
-    land.texture_offset-=1
-    if round_to_closest(counter, step = 1) % 10 == 0:
-        if frame < 60:
-            frame += 1 * booltoint(PlayerDead) 
-        else:
-            frame = 0
     if Collision.intersects().hit:
         if PlayerDead == False:
             
@@ -139,10 +137,10 @@ def update():
         PlayerDead = True
         land.pause()
         death.origin = (0, -4)
-        try:
+        if find("highscore.txt", "./") == True:
             with open("highscore.txt", "r") as outfile:
-                highscore = int(outfile.read)
-        except:
+                highscore = int(outfile.read())
+        else:
             highscore = 0
         if round_to_closest(counter, step=1) > highscore:
             hs = Text(text="New High Score!!!",origin = (0, -2),scale =3)
